@@ -4,13 +4,13 @@ This program is a simple demonstration of code and an attack exploiting CWE 94: 
 
 # How to run
 ```
-python cwe94.py
+sh attack.sh | python cwe94.py
 ```
-
-# Input to exploit
+where `attack.sh` is:
 ```
-' or __import__("os").system("echo Bad code executed!") or True or '
+echo -n "' or __import__(\"os\").system(\"echo Bad code executed!\") or True or '"
 ```
+which inputs a predefined string when the program askes for password.
 
 # How does it work?
 `eval()` function is used to compare the user input and the actual password. The vulnerability arises because `eval()` allows arbitrary code execution as it executes any valid Python code in the string passed to it. This gives attackers the opportunity to inject malicious code into the password check process. 
