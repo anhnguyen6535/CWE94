@@ -1,45 +1,67 @@
 # About 
-This program is a simple demonstration of code and an attack exploiting CWE 94: Improper Control of Generation of Code ('Code Injection').
+This program is a simple demonstration of attack exploiting CWE 94: Improper Control of Generation of Code ('Code Injection'). This concept includes several attack types, such as: CWE-79 (Cross-Site Scripting), CWE-78 (OS Command Injection), CWE-89 (SQL Injection), and CWE-918 (Server-Side Request Forgery). For this project, we focus specifically on exploring SQL Injection through both the code and the attack process.
+
+# How to run the project online (recommended)
+Visit [here](http://147.182.249.239/MyWeb/)
+
+#### note: if you can access it online, skip the next part.
+
+# How to compile and run the project locally
+1. Install local server XAMPP: https://www.apachefriends.org/
+2. During installation:
+- if the installer warns about UAC, avoid installing in `C:\Program Files`. Instead, choose a directory like `C:\xampp`.
+3. Lauch XAMPP Control Panel: 
+- It will open automatically or can be found at <saved_location>xampp-control.exe
+- Start **Apache** and **MySQL**
+5. Navigate to <saved_location>/htdocs, delete all contents.
+6. Copy this project folder into the `htdocs` directory.
+7. Access the website at http://localhost/MyWeb/
 
 
-# How to run
-```
-sh attack.sh | python cwe94.py
-```
-where `attack.sh` is:
-```
-echo -n "' or __import__(\"os\").system(\"echo Bad code executed!\") or True or '"
-```
-which inputs a predefined string when the program askes for password.
+## Login Credentials
+You can use the following credentials to log in as a regular user:
+| **Username**    | **Password**        |
+|------------------|---------------------|
+| `admin`         | `sup3rP@ssw0rd`     |
+| `emmajohnson`   | `password`          |
+| `w3ird_buddy`   | `password`          |
 
-# How does it work?
-`eval()` function is used to compare the user input and the actual password. The vulnerability arises because `eval()` allows arbitrary code execution as it executes any valid Python code in the string passed to it. This gives attackers the opportunity to inject malicious code into the password check process. 
-In the attack input:
+## How to attack?
+To exploit and access the account of a user with `id = 2`, use the following SQL injection input:
+- Username:
 ```
-' or __import__("os").system("echo Bad code executed!") or True or '
+' OR id = 2 #
 ```
-This input is passed into:
-`password_check_code = f"'{user_input}' == 'admin1234'"`
+- Password: any value
 
-The resulting `password_check_code` will look like this:
+Click **Login** to access their personal account. 
+
+
+# How does the attack work?
+When a user clicks "Login," the program checks their credentials against the database using the following SQL command:
+```php
+$sql = "SELECT * FROM users WHERE username = '$username' AND pwd = '$pwd'"; 
 ```
-'' or __import__("os").system("echo Bad code executed!") or True or '' == 'admin1234' 
+When using the attack input:
+- The first single quote `'` got combined with the opening quote of the `username` field, creating an empty username. 
+- The OR operator allows injecting a condition `id = 2` into the SQL command. 
+- The `#` symbol comments out the remaining part of the query, bypassing password verification.
+As a result, the query is modified to: 
+```sql
+SELECT * FROM users WHERE username = '' OR id = 2 # AND pwd = '';
 ```
 
-The `eval()` function treats `or` as an operator, so the code first checks the empty string `''`, then executes the malicious code.
-It then check the next phrase which is `True`, causes the program to immediately returns `True`, bypassing the checking.
-This example demonstrates not only how malicious code can be injected into the system, but also how an attacker can manipulate the input to bypass security checks.
-
-# How to prevent this?
-1. Avoid using `eval()` especially with untrusted input. If dynamic evaluation is necessary, consider using safer alternatives like `ast.literal_eval()` for evaluating simple literals or avoid dynamic code evaluation altogether. [source](https://stackoverflow.com/questions/15197673/using-pythons-eval-vs-ast-literal-eval)
-
-2. Sanitize input: ensure the input is sanitized and only safe expressions are evaluated.
-
-# Example of solution:
+# Other potential attacks
+1. Determine the Structure of the Database
 ```
-def check_password(user_input):
-    print("Checking password...")
-    if user_input == 'admin1234':
-        return True
-    return False
+' UNION SELECT NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL  #
 ```
+- If the number of NULL values does not match the number of columns, the page will throw an error indicating the mismatch.
+- An attacker can adjust the number of NULL values iteratively to discover the correct structure.
+
+2. Access account by guessing username `admin'#`
+Use the following to bypass password validation by guessing usernames:
+```
+<username>'#
+```
+This input sets the username to admin and comments out the password verification, allowing access to the admin account.
