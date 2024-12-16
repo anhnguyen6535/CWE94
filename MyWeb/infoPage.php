@@ -4,7 +4,7 @@ session_start();
 // Reset session once logged out
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     session_destroy(); 
-    header("Location: index.php");  
+    header("Location: login.php");  
     exit();
 }
 

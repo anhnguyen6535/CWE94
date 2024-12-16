@@ -1,73 +1,63 @@
 <?php
-session_start();
-
 // Create connection to database
 $servername = "localhost";
 $username = "root";
 $password = ""; 
 $dbname = "sbank";
-// $servername = "sql200.infinityfree.com";
-// $username = "if0_37924777";
-// $password = "xpIk9zrI0ZrjQZl"; 
-// $dbname = "if0_37924777_sbank";
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle login
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $pwd = $_POST['pwd'];
-
-    // Find user input of username and password in the database
-    $sql = "SELECT * FROM users WHERE username = '$username' AND pwd = '$pwd'"; 
-    // echo "Executed command: ";
-    // echo $sql;
-
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        echo "Login successful!";
-
-        // Store data to this session
-        $user = $result->fetch_assoc();
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['firstname'] = $user['firstname'];
-        $_SESSION['lastname'] = $user['lastname'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['address'] = $user['address'];
-        $_SESSION['money'] = $user['money'];
-        $_SESSION['account'] = $user['account'];
-
-        // Go to next page
-        header("Location: infoPage.php");
-        exit();
-    } else {
-        echo "Invalid credentials!";
-    }
+// Create database if it does not exist
+$sql = "CREATE DATABASE IF NOT EXISTS $dbname";
+if ($conn->query($sql) === TRUE) {
+    echo "Database $dbname created successfully (or already exists).<br>";
+} else {
+    echo "Error creating database: " . $conn->error;
 }
+
+// Select the database to work with
+$conn->select_db($dbname);
+
+// Create the 'users' table if it does not exist
+$sql = "CREATE TABLE IF NOT EXISTS users (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL, 
+    pwd VARCHAR(255) NOT NULL,
+    firstname VARCHAR(30) NOT NULL, 
+    lastname VARCHAR(30) NOT NULL,
+    email VARCHAR(100) NOT NULL, 
+    address VARCHAR(255) NOT NULL,
+    money DOUBLE,
+    account INT(11) NOT NULL,
+    PRIMARY KEY (id)
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table 'users' created successfully.<br>";
+} else {
+    echo "Error creating table: " . $conn->error;
+}
+
+// Insert sample data into the 'users' table
+$sql = "INSERT INTO users (username, pwd, firstname, lastname, email, address, money, account) 
+        VALUES
+        ('admin', 'sup3rP@ssw0rd', 'Tony', 'Mai', 'admin@sbank.com', '316 Center Street NE, Calgary, T5O 6K9', 0, 123456),
+        ('emmajohnson', 'password', 'Emma', 'Johnson', 'emmajohnson@gmail.com', '789 67 Ave SW, Calgary, T0Y 9MO', 5000000, 654321),
+        ('w3ird_buddy', 'password', 'Michelle', 'Lee', 'weirdbuddy@gmail.com', '765 9 Ave SW, Calgary, T0Y 8N2', 50000000, 456789)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Sample data inserted into 'users' table.<br>";
+} else {
+    echo "Error inserting data: " . $conn->error;
+}
+
+// Close the connection
+$conn->close();
+
+header("Location: index.php");
+exit();
+
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>SBank</title>
-</head>
-<body>
-    <main>
-        <h1>SBank</h1>
-        <form action="" method="post">
-            <input required id="username" type="text" name="username" placeholder="Username...">
-            <input required id="pwd" type="password" name="pwd" placeholder="Password...">
-
-            <button type="submit">Login</button>
-        </form>
-    </main>
-</body>
-</html>
-
