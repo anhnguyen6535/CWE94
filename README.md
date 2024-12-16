@@ -14,7 +14,7 @@ Visit [here](http://147.182.249.239/MyWeb/)
 - It will open automatically or can be found at <saved_location>xampp-control.exe
 - Start **Apache** and **MySQL**
 5. Navigate to <saved_location>/htdocs, delete all contents.
-6. Copy this project folder into the `htdocs` directory.
+6. Copy folder `MyWeb` into the `htdocs` directory.
 7. Access the website at http://localhost/MyWeb/
 
 
