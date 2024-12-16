@@ -32,11 +32,11 @@ $account = $_SESSION['account'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="infoPage.css">
-    <title>SBank</title>
+    <title>SBank - Crypto Wallet</title>
 </head>
 <body>
     <div class="navbar">
-        <div class="logo">SBank</div>
+        <div class="logo">SBank - Crypto Wallet</div>
         <form action="" method="post">
             <button class="logout-btn" type="submit">Logout</button>
         </form>
@@ -47,7 +47,7 @@ $account = $_SESSION['account'];
         <h3>Account number: <?php echo $account; ?></h3>
         <h3>Email: <?php echo $email; ?></h3>
         <h3>Address: <?php echo $address; ?></h3>
-        <h3>You have $<?php echo $money; ?> CAD in your crypto account.</h3>
+        <h3>You have $<?php echo $money; ?> CAD in your wallet.</h3>
     </div>
 </body>
 </html>

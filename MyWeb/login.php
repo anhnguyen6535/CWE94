@@ -6,10 +6,6 @@ $servername = "localhost";
 $username = "root";
 $password = ""; 
 $dbname = "sbank";
-// $servername = "sql200.infinityfree.com";
-// $username = "if0_37924777";
-// $password = "xpIk9zrI0ZrjQZl"; 
-// $dbname = "if0_37924777_sbank";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -23,9 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Find user input of username and password in the database
     $sql = "SELECT * FROM users WHERE username = '$username' AND pwd = '$pwd'"; 
-    // echo "Executed command: ";
-    // echo $sql;
-
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -56,11 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>SBank</title>
+    <title>SBank - Crypto Wallet</title>
 </head>
 <body>
     <main>
-        <h1>SBank</h1>
+        <h1>SBank - Crypto Wallet</h1>
         <form action="" method="post">
             <input required id="username" type="text" name="username" placeholder="Username...">
             <input required id="pwd" type="password" name="pwd" placeholder="Password...">

@@ -46,6 +46,7 @@ $sql = "INSERT INTO users (username, pwd, firstname, lastname, email, address, m
         VALUES
         ('admin', 'sup3rP@ssw0rd', 'Tony', 'Mai', 'admin@sbank.com', '316 Center Street NE, Calgary, T5O 6K9', 0, 123456),
         ('emmajohnson', 'password', 'Emma', 'Johnson', 'emmajohnson@gmail.com', '789 67 Ave SW, Calgary, T0Y 9MO', 5000000, 654321),
+        ('sarahlee', 'password', 'Sarah', 'Lee', 'sarahlee@example.com', '321 Maple Avenue, Edmonton, AB, T5J 1N8', 40500.00, 444444),
         ('w3ird_buddy', 'password', 'Michelle', 'Lee', 'weirdbuddy@gmail.com', '765 9 Ave SW, Calgary, T0Y 8N2', 50000000, 456789)";
 
 if ($conn->query($sql) === TRUE) {
@@ -57,7 +58,7 @@ if ($conn->query($sql) === TRUE) {
 // Close the connection
 $conn->close();
 
-header("Location: index.php");
+header("Location: login.php");
 exit();
 
 ?>
