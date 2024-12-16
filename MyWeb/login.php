@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: infoPage.php");
         exit();
     } else {
-        echo "Invalid credentials!";
+        $error_message = "Invalid credentials!";
     }
 }
 ?>
@@ -58,6 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input required id="username" type="text" name="username" placeholder="Username...">
             <input required id="pwd" type="password" name="pwd" placeholder="Password...">
 
+            <?php 
+            if (isset($error_message)) {
+                echo "<p style='color: '#e03e3e';'>" . $error_message . "</p>";
+            }
+            ?>
             <button type="submit">Login</button>
         </form>
     </main>
