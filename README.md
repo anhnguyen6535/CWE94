@@ -1,8 +1,12 @@
 # About 
 This program is a simple demonstration of attack exploiting CWE 94: Improper Control of Generation of Code ('Code Injection'). This concept includes several attack types, such as: CWE-79 (Cross-Site Scripting), CWE-78 (OS Command Injection), CWE-89 (SQL Injection), and CWE-918 (Server-Side Request Forgery). For this project, we focus specifically on exploring SQL Injection through both the code and the attack process.
 
+# How to run the project online (recommended)
+Visit [here](http://147.182.249.239/MyWeb/)
 
-# How to run the project
+#### note: if you can access it online, skip the next part.
+
+# How to compile and run the project locally
 1. Install local server XAMPP: https://www.apachefriends.org/
 2. During installation:
 - if the installer warns about UAC, avoid installing in `C:\Program Files`. Instead, choose a directory like `C:\xampp`.
